@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Spotify Lyrics Viewer!</h1>
+    <button id="get-lyrics">Get Current Song Lyrics</button>
+    <div id="lyrics"></div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        document.getElementById('get-lyrics').addEventListener('click', async () => {
+            const result = await ipcRenderer.invoke('get-lyrics');
+            const lyricsDiv = document.getElementById('lyrics')
+
+            if (typeof result === 'string') {
+                lyricsDiv.textContent = result;
+            } else {
+                lyricsDiv.textContent = `Track: ${result.trackName}\nArtist: ${result.artistName}\n\n${result.lyrics}`;
+            }
+        });
+    </script>
+</body>
+</html> 
